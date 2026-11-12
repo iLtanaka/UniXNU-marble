@@ -46,7 +46,7 @@
 "title" = "marble iOS 27"
 # 256 MiB = the "Kernel" region (0xA8000000, 0x10000000) of marble's Mu memory map (MemoryMapLib.c). shennong reached vfs_mountroot with the same size.
 # Android's /proc/iomem (marble-pmos logs/live-android/2026-09-24/proc/iomem) shows 0xa7000000-0xdfffffff as System RAM with the same FD range reserved.
-"dram_size" = "0x10000000"
+"dram_size" = "0x80000000"
 "panic_screen" = true
 "kernel_args" = ["-v", "serial=3", "debug=0x14e", "cpus=1", "kt_fixed_zones=120", "-no_slto_panic"]
 
