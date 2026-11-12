@@ -18,9 +18,11 @@
 "config" = "marble"
 "dsc" = "Platforms/Xiaomi/marblePkg/marble.dsc"
 "fd" = "Build/marblePkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
+"submodules" = ["Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
 "packages" = ["{uefi}", "{uefi}/Platforms/Xiaomi", "{tree}/package", "{tree}/drivers/DarwinBoot", "{edk2}", "{uefi}/Common/Mu", "{uefi}/Common/Mu_OEM_Sample", "{uefi}/Silicon/Qualcomm", "{uefi}/Silicon/Silicium", "{uefi}/Silicium-ACPI", "{uefi}/Silicium-ACPI/Platforms/Xiaomi", "{uefi}/Silicium-ACPI/SoCs/Qualcomm"]
 
 ["firmware"."defines"]
+"ENABLE_SECUREBOOT" = "0"
 "DEVICE_MODEL" = "marble"
 
 # The iOS root goes to UFS partition sda36 (label rootfs2, 25 GiB, 4096-byte LBAs).
@@ -40,7 +42,7 @@
 # ---- payload and boot image (first bring-up values; sources are cited in the comments) ----
 ["payload"]
 "volume" = "MARBLEESP"
-"size_mib" = 192
+"size_mib" = 160
 # DarwinBoot is built into the firmware volume (APRIORI.inc), so the loader protocol comes from the firmware.
 "loader" = "firmware"
 "title" = "marble iOS 27"
@@ -53,9 +55,20 @@
 ["payload"."adt"]
 # A18 Pro, T8140 (iPhone17,1): the hex of the profile's decimal chip_id 33088.
 "chip_id" = "8140"
-"owned_memory_size" = "0x10000000"
+"owned_memory_size" = "0x100000000"
 "root_match_volume_uuid" = "C3A4D926-411E-4365-9855-1B66A5CE0263"
 
-["bootimg"]
-# The firmware's own device tree is appended: Resources/Configs/marble.toml in uefi-marble has append_dtb = true, FD base 0xA7100000, size 0x300000, header v4.
-"append_dtb" = "Resources/DTBs/marble.dtb"
+["bootimg"."image"]
+# Android boot image v0: MiLacy/UniXNU-marble measured that the fastboot boot path on marble does not reliably load a v4 ramdisk.
+# The kernel lands at 0x80008000, the payload at 0xA8000000-0xB2000000 (above the PIL reservation at 0x85200000, below the
+# display reservation at 0xB8000000).
+"base" = 0x80000000
+"kernel_offset" = 0x8000
+"ramdisk_offset" = 0x28000000
+"tags_offset" = 0x100
+"pagesize" = 4096
+"header_version" = 0
+
+[["bootimg"."dtb_node"]]
+"path" = "/chosen"
+"props" = [{ "name" = "linux,initrd-start", "type" = "x", "value" = "0xA8000000" }, { "name" = "linux,initrd-end", "type" = "x", "value" = "0xB2000000" }]
