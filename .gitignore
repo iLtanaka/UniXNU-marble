@@ -1,0 +1,7 @@
+device-dumps/
+local.toml
+/out/
+/build/
+/Build/
+*.ipsw
+*.im4p

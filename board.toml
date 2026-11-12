@@ -1,0 +1,38 @@
+"schema_version" = 2
+
+["board"]
+"name" = "marble"
+"soc" = "SM7475"
+"description" = "Xiaomi Redmi Note 12 Turbo / POCO F5, iOS 27 bring-up as iPhone 16 Pro (iPhone17,1)"
+"kit" = "marble"
+"soc_source" = "sm7475"
+"os_profile" = "iphone-27.0.1-24A446"
+
+["kernel"]
+"defconfig" = "marble_ios27_defconfig"
+"config_fragments" = ["arch:configs/common.config", "os:configs/ipados.config"]
+"archives" = ["build-corecrypto-14.py", "build-corecrypto-14.py --namespace", "component:ArmDTPlatform", "component:ArmCpu", "build-libpthread-kernel.py", "component:RamBlock"]
+"patch_series" = ["arch:patches/xnu/series", "soc:patches/xnu-12377/series", "os:patches/xnu/series", "device:patches/xnu-12377/series"]
+
+["firmware"]
+"config" = "marble"
+"dsc" = "Platforms/Xiaomi/marblePkg/marble.dsc"
+"fd" = "Build/marblePkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
+"packages" = ["{uefi}", "{uefi}/Platforms/Xiaomi", "{tree}/package", "{tree}/drivers/DarwinBoot", "{edk2}", "{uefi}/Common/Mu", "{uefi}/Common/Mu_OEM_Sample", "{uefi}/Silicon/Qualcomm", "{uefi}/Silicon/Silicium", "{uefi}/Silicium-ACPI", "{uefi}/Silicium-ACPI/Platforms/Xiaomi", "{uefi}/Silicium-ACPI/SoCs/Qualcomm"]
+
+["firmware"."defines"]
+"DEVICE_MODEL" = "marble"
+
+# The iOS root goes to UFS partition sda36 (label rootfs2, 25 GiB, 4096-byte LBAs).
+["device_tree"]
+"source" = "device:dts/marble.dts"
+"include_dirs" = ["soc:dts"]
+
+["components"]
+"include" = ["ArmDTPlatform", "ArmCpu", "DarwinBoot", "RamBlock"]
+
+["package"]
+"unixnu" = "../UniXNU-dev"
+
+["package"."defconfig"]
+"iphone-27.0.1-24A446" = "marble_ios27_defconfig"

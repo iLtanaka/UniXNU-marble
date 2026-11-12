@@ -1,0 +1,57 @@
+name: kernel
+
+# Kernel step only (xnu-12377 for marble, iPhone17,1 identity) on a macOS runner.
+# The device repository and the UniXNU-dev checkout sit side by side, as board.toml's [package] unixnu names.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  kernel:
+    runs-on: macos-26
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: UniXNU-marble
+      - uses: actions/checkout@v4
+        with:
+          repository: iLtanaka/UniXNU-dev
+          path: UniXNU-dev
+          submodules: recursive
+      - name: tools
+        run: brew install dtc llvm lld cmake ninja
+      - name: resolve
+        working-directory: UniXNU-dev
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          ./unixnu defconfig marble_ios27_defconfig -D ../UniXNU-marble
+          ./unixnu fetch -D ../UniXNU-marble
+          ./unixnu status -D ../UniXNU-marble
+          ./unixnu tree -D ../UniXNU-marble
+      - name: kernel
+        working-directory: UniXNU-dev
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -o pipefail
+          ./unixnu kernel -D ../UniXNU-marble 2>&1 | tee ../kernel.log
+      - name: logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel-log
+          retention-days: 3
+          path: kernel.log
+      - name: kernel image
+        uses: actions/upload-artifact@v4
+        with:
+          name: kernel
+          retention-days: 3
+          if-no-files-found: error
+          path: UniXNU-dev/out/marble/*/*/kernel/kernel.macho
