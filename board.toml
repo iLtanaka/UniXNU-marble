@@ -36,3 +36,26 @@
 
 ["package"."defconfig"]
 "iphone-27.0.1-24A446" = "marble_ios27_defconfig"
+
+# ---- payload and boot image (first bring-up values; sources are cited in the comments) ----
+["payload"]
+"volume" = "MARBLEESP"
+"size_mib" = 192
+# DarwinBoot is built into the firmware volume (APRIORI.inc), so the loader protocol comes from the firmware.
+"loader" = "firmware"
+"title" = "marble iOS 27"
+# 256 MiB = the "Kernel" region (0xA8000000, 0x10000000) of marble's Mu memory map (MemoryMapLib.c). shennong reached vfs_mountroot with the same size.
+# Android's /proc/iomem (marble-pmos logs/live-android/2026-09-24/proc/iomem) shows 0xa7000000-0xdfffffff as System RAM with the same FD range reserved.
+"dram_size" = "0x10000000"
+"panic_screen" = true
+"kernel_args" = ["-v", "serial=3", "debug=0x14e", "cpus=1", "kt_fixed_zones=120", "-no_slto_panic"]
+
+["payload"."adt"]
+# A18 Pro, T8140 (iPhone17,1): the hex of the profile's decimal chip_id 33088.
+"chip_id" = "8140"
+"owned_memory_size" = "0x10000000"
+"root_match_volume_uuid" = "C3A4D926-411E-4365-9855-1B66A5CE0263"
+
+["bootimg"]
+# The firmware's own device tree is appended: Resources/Configs/marble.toml in uefi-marble has append_dtb = true, FD base 0xA7100000, size 0x300000, header v4.
+"append_dtb" = "Resources/DTBs/marble.dtb"
