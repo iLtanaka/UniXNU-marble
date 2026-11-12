@@ -29,7 +29,7 @@
 "include_dirs" = ["soc:dts"]
 
 ["components"]
-"include" = ["ArmDTPlatform", "ArmCpu", "DarwinBoot"]
+"include" = ["ArmDTPlatform", "ArmCpu", "XnuPrelink", "DarwinBoot"]
 
 ["package"]
 "unixnu" = "../UniXNU-dev"
