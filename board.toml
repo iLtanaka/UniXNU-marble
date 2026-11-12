@@ -11,7 +11,7 @@
 ["kernel"]
 "defconfig" = "marble_ios27_defconfig"
 "config_fragments" = ["arch:configs/common.config", "os:configs/ipados.config"]
-"archives" = ["build-corecrypto-14.py", "build-corecrypto-14.py --namespace", "component:ArmDTPlatform", "component:ArmCpu", "build-libpthread-kernel.py", "component:RamBlock"]
+"archives" = ["build-corecrypto-14.py", "build-corecrypto-14.py --namespace", "component:ArmDTPlatform", "component:ArmCpu", "build-libpthread-kernel.py"]
 "patch_series" = ["arch:patches/xnu/series", "soc:patches/xnu-12377/series", "os:patches/xnu/series", "device:patches/xnu-12377/series"]
 
 ["firmware"]
@@ -29,7 +29,7 @@
 "include_dirs" = ["soc:dts"]
 
 ["components"]
-"include" = ["ArmDTPlatform", "ArmCpu", "DarwinBoot", "RamBlock"]
+"include" = ["ArmDTPlatform", "ArmCpu", "DarwinBoot"]
 
 ["package"]
 "unixnu" = "../UniXNU-dev"

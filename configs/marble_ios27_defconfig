@@ -1,8 +1,7 @@
-# marble iOS 27 first-boot defconfig: crypto from source (the corecrypto 14 archive), RAM-disk root, DT panic region.
+# marble iOS 27 first-boot defconfig: crypto from source (the corecrypto 14 archive), DT panic region.
 # Modelled on sheng_ipados27_defconfig without its UFS source storage, owner-root policy, display and GPU entries.
 CONFIG_XNU_BUILD_ARCHIVES=y
 CONFIG_XNU_CRYPTO_BOOTSTRAP="source"
 CONFIG_XNU_DT_PANIC_REGION=y
 CONFIG_XNU_ARMVIRT_PLATFORM=n
 CONFIG_XNU_KERNEL_CHAINED_FIXUPS=y
-CONFIG_XNU_NATIVE_RAM_BLOCK=y
